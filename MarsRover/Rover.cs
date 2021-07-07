@@ -9,6 +9,34 @@ namespace MarsRover
 
         public Rover(int position)
         {
+            Position = position;
+            Mode = "NORMAL";
+            GeneratorWatts = 110;
+        }
+
+        public void ReceiveMessage(Message message)
+        {
+            for (int i = 0; i < message.Commands.Length; i++)
+            {
+                string commandType = message.Commands[i].CommandType;
+
+                if (commandType == "MODE_CHANGE")
+                {
+                    Mode = message.Commands[i].NewMode;
+                }
+                else if (commandType == "MOVE")
+                {
+                    if (Mode != "LOW_POWER")
+                    {
+                        Position = message.Commands[i].NewPosition;
+                    }
+                }
+                else if (commandType != "MODE_CHANGE" || commandType != "MOVE")
+                {
+                    throw new ArgumentException("This Command Type is denied");
+                }
+            }
+
         }
 
         public override string ToString()
