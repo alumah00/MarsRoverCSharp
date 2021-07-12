@@ -71,16 +71,21 @@ namespace MarsRoverTests
         [TestMethod]
         public void PositionChangesFromMoveCommand()
         {
-            Command[] commands = { new Command("MODE_CHANGE", 500, "LOW_POWER") };
+            Command[] commands = { new Command("MOVE", 100) };
             Message newMessage = new Message("HAPPY", commands);
             Rover newChange = new Rover(250);
 
+            int expectedRoverPosition = 250;
+            int actualRoverPosition = newChange.Position;
+
+            Assert.AreEqual(expectedRoverPosition, actualRoverPosition);
+
             newChange.ReceiveMessage(newMessage);
 
-            string expectedRoverMode = "LOW_POWER";
-            string actualRoverMode = newChange.Mode;
+            expectedRoverPosition = 100;
+            actualRoverPosition = newChange.Position;
 
-            Assert.AreEqual(expectedRoverMode, actualRoverMode);
+            Assert.AreEqual(expectedRoverPosition, actualRoverPosition);
         }
     }
 }
